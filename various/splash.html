@@ -1,0 +1,44 @@
+```html
+<!-- POWERED BY AUDIA SPLASH -->
+<style>
+  #audia-splash{position:fixed;inset:0;z-index:9999;background:#0e0e0e;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:18px;opacity:1;transition:opacity 0.9s ease;}
+  #audia-splash.fade-out{opacity:0;pointer-events:none;}
+  .splash-word{display:flex;align-items:baseline;gap:1px;}
+  .splash-letter{font-family:'Syne',sans-serif;font-size:72px;font-weight:800;letter-spacing:-3px;color:#2a2a2a;display:inline-block;transition:color 0.35s ease,text-shadow 0.35s ease,transform 0.35s cubic-bezier(0.34,1.56,0.64,1);transform:scale(1) translateY(0);will-change:transform,color,text-shadow;}
+  .splash-letter.active{color:#ffffff;text-shadow:0 0 18px rgba(255,255,255,0.55),0 0 40px rgba(200,200,200,0.25);transform:scale(1.12) translateY(-2px);}
+  .splash-letter.passed{color:#b0b0b0;text-shadow:none;transform:scale(1) translateY(0);}
+  .splash-letter.rest{color:#e8e8e8;text-shadow:none;transform:scale(1) translateY(0);transition:color 0.5s ease,text-shadow 0.5s ease,transform 0.5s ease;}
+  .splash-sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:5px;color:#444;text-transform:uppercase;opacity:0;transform:translateY(4px);transition:opacity 0.7s ease,transform 0.7s ease;}
+  .splash-sub.show{opacity:1;transform:translateY(0);}
+</style>
+<div id="audia-splash">
+  <div class="splash-word" id="splashWord"></div>
+  <div class="splash-sub">powered by audia</div>
+</div>
+<script>
+(function(){
+  const word='audia',container=document.getElementById('splashWord'),splash=document.getElementById('audia-splash');
+  const sub=splash.querySelector('.splash-sub');
+  const spans=[];
+  word.split('').forEach(ch=>{const s=document.createElement('span');s.className='splash-letter';s.textContent=ch;container.appendChild(s);spans.push(s);});
+  let i=0;
+  function step(){
+    if(i>0){spans[i-1].classList.remove('active');spans[i-1].classList.add('passed');}
+    if(i<spans.length){spans[i].classList.add('active');i++;setTimeout(step,210);}
+    else{
+      setTimeout(()=>{
+        spans[spans.length-1].classList.remove('active');spans[spans.length-1].classList.add('passed');
+        setTimeout(()=>{
+          spans.forEach(s=>{s.classList.remove('active','passed');s.classList.add('rest');});
+          setTimeout(()=>{
+            sub.classList.add('show');
+            setTimeout(()=>{splash.classList.add('fade-out');setTimeout(()=>splash.remove(),950);},1400);
+          },200);
+        },400);
+      },280);
+    }
+  }
+  setTimeout(step,500);
+})();
+</script>
+```
